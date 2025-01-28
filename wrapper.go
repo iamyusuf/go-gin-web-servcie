@@ -15,16 +15,17 @@ func Wrap(handler func(*gin.Context) (interface{}, error)) gin.HandlerFunc {
 
 			if errors.As(err, &httpErr) {
 				c.JSON(httpErr.Code, gin.H{"error": httpErr.Error()})
+			} else {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			}
 
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
 		}
 
-		// Check if the response is a SuccessResponse type
-		if successResp, ok := response.(SuccessResponse); ok {
-			c.JSON(successResp.Status, successResp.Data)
+		if res, ok := response.(*APIResponse); ok {
+			c.JSON(res.Status, res.Data)
 		} else {
-			c.JSON(http.StatusOK, response) // Default to 200 OK
+			c.JSON(http.StatusOK, response)
 		}
 	}
 }

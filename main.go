@@ -23,7 +23,7 @@ func (s *Server) Start() error {
 }
 
 func (s *Server) registerRoutes() {
-	s.engine.GET("/hello", helloRouteHandler)
+	s.engine.GET("/hello", Wrap(helloRouteHandler))
 }
 
 func NewServer(config Config) *Server {
@@ -39,8 +39,8 @@ func main() {
 	}
 }
 
-func helloRouteHandler(c *gin.Context) {
-	c.JSON(200, gin.H{
+func helloRouteHandler(c *gin.Context) (interface{}, error) {
+	return gin.H{
 		"message": "Hello World",
-	})
+	}, nil
 }

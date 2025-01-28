@@ -1,13 +1,12 @@
 package main
 
-// SuccessResponse allows handlers to specify a custom success status code.
-type SuccessResponse struct {
+type APIResponse struct {
 	Status int
 	Data   interface{}
 }
 
-func NewSuccessResponse(status int, data interface{}) *SuccessResponse {
-	return &SuccessResponse{
+func NewAPIResponse(status int, data interface{}) *APIResponse {
+	return &APIResponse{
 		Status: status,
 		Data:   data,
 	}
