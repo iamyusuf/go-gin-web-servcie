@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"my-service/internal/config"
 	"my-service/internal/server"
 	"os"
 )
@@ -20,8 +22,9 @@ func main() {
 	}
 
 	// Run server
-	log.Println("Starting server on :8080")
-	if err := srv.Run(":8080"); err != nil {
+	port := config.EnvConfigs.AppPort
+	log.Printf("Starting server on :%d\n", port)
+	if err := srv.Run(fmt.Sprintf(":%d", port)); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 }
