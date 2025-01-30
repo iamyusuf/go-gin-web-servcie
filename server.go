@@ -19,7 +19,6 @@ func (s *Server) Start() error {
 }
 
 func (s *Server) registerRoutes() {
-	s.Router.GET("/hello", Wrap(helloRouteHandler))
 }
 
 func NewServer(config Config) *Server {
