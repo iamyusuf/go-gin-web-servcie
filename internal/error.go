@@ -1,4 +1,4 @@
-package main
+package internal
 
 // HTTPError represents an error with an associated HTTP status code.
 type HTTPError struct {
