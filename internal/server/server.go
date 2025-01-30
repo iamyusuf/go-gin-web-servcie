@@ -3,7 +3,9 @@ package server
 import (
 	"gorm.io/driver/postgres"
 	"log"
+	"my-service/internal/handlers"
 	"my-service/internal/models"
+	"my-service/internal/services"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -43,8 +45,11 @@ func (s *Server) setupRoutes() {
 
 	// Add your other routes here
 	// Example:
-	// userRoutes := s.Router.Group("/users")
-	// userRoutes.GET("/", handlers.GetUsers)
+	userHandler := handlers.NewUserHandler(services.NewUserService(s.DB))
+	apis := s.Router.Group("/api")
+	apis.POST("users", userHandler.CreateUser)
+
+	// userRoutes.GET("/", handlers.CreateUser)
 }
 
 func (s *Server) Run(addr string) error {
