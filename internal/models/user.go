@@ -8,8 +8,8 @@ import (
 
 type User struct {
 	ID          uint           `json:"id" gorm:"primaryKey"`
-	Name        string         `json:"name"`
-	Email       *string        `json:"email"`
+	Name        string         `json:"name" binding:"required"`
+	Email       *string        `json:"email" binding:"required,email"`
 	Birthday    *time.Time     `json:"birthday"`
 	ActivatedAt sql.NullTime   `json:"activated_at"`
 	CreatedAt   time.Time      `json:"created_at"`
