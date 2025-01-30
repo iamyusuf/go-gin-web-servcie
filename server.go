@@ -10,19 +10,18 @@ type Config struct {
 
 type Server struct {
 	Config
-	engine *gin.Engine
+	Router *gin.Engine
 }
 
 func (s *Server) Start() error {
 	s.registerRoutes()
-	return s.engine.Run(":8080")
+	return s.Router.Run(":8080")
 }
 
 func (s *Server) registerRoutes() {
-	s.engine.GET("/hello", Wrap(helloRouteHandler))
 }
 
 func NewServer(config Config) *Server {
 	engine := gin.New()
-	return &Server{engine: engine, Config: config}
+	return &Server{Router: engine, Config: config}
 }
