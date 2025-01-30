@@ -6,6 +6,18 @@ import (
 	"net/http"
 )
 
+type APIResponse struct {
+	Status int
+	Data   interface{}
+}
+
+func NewAPIResponse(status int, data interface{}) *APIResponse {
+	return &APIResponse{
+		Status: status,
+		Data:   data,
+	}
+}
+
 func Wrap(handler func(*gin.Context) (interface{}, error)) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		response, err := handler(c)
