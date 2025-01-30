@@ -3,6 +3,7 @@ package server
 import (
 	"gorm.io/driver/postgres"
 	"log"
+	"my-service/internal/models"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -59,7 +60,7 @@ func initializeDB(dsn string) (*gorm.DB, error) {
 	}
 
 	// Run migrations
-	// db.AutoMigrate(&models.User{})
+	_ = db.AutoMigrate(&models.User{})
 
 	log.Println("Connected to database")
 	return db, nil
