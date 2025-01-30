@@ -7,6 +7,7 @@ import (
 )
 
 type envConfigs struct {
+	AppMode    string `mapstructure:"APP_MODE"`
 	AppPort    int    `mapstructure:"APP_PORT"`
 	DbHost     string `mapstructure:"DB_HOST"`
 	DbPort     int    `mapstructure:"DB_PORT"`
