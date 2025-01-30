@@ -11,7 +11,6 @@ func main() {
 	port := config.EnvConfigs.AppPort
 	fmt.Printf("Server running on port %v\n", port)
 	dsn := config.EnvConfigs.GetDSN()
-	fmt.Println("dsn:", dsn)
 	srv, err := server.NewServer(dsn)
 	if err != nil {
 		log.Fatalf("Failed to initialize server: %v", err)

@@ -28,10 +28,10 @@ func (e *envConfigs) GetDSN() string {
 var EnvConfigs *envConfigs
 
 func init() {
-	EnvConfigs = loadEnvVariables()
+	EnvConfigs = loadEnv()
 }
 
-func loadEnvVariables() (config *envConfigs) {
+func loadEnv() (config *envConfigs) {
 	viper.AddConfigPath(".")
 	viper.SetConfigName(".env")
 	viper.SetConfigType("env")
