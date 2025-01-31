@@ -2,6 +2,7 @@ package services
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gookit/slog"
 	"gorm.io/gorm"
 	"my-service/internal/models"
 )
@@ -26,8 +27,10 @@ func (s *UserService) CreateUser(c *gin.Context) (uint, error) {
 	result := s.db.Create(user)
 
 	if result.Error != nil {
+		slog.Error(result.Error)
 		return user.ID, result.Error
 	}
 
+	slog.WithData(slog.M{"id": user.ID}).Info("user created successfully")
 	return user.ID, nil
 }
