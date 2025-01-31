@@ -34,3 +34,16 @@ func (s *UserService) CreateUser(c *gin.Context) (uint, error) {
 	slog.WithData(slog.M{"id": user.ID}).Info("user created successfully")
 	return user.ID, nil
 }
+
+func (s *UserService) GetUser(c *gin.Context) (*models.User, error) {
+	userId := c.Param("id")
+	var user models.User
+	result := s.db.First(&user, userId)
+
+	if result.Error != nil {
+		slog.Error(result.Error)
+		return nil, result.Error
+	}
+
+	return &user, nil
+}

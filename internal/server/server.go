@@ -17,39 +17,29 @@ type Server struct {
 }
 
 func NewServer(dsn string) (*Server, error) {
-	// Initialize database
 	db, err := initializeDB(dsn)
 	if err != nil {
 		return nil, err
 	}
 
-	// Create server instance
 	server := &Server{
 		DB:     db,
 		Router: gin.Default(),
 	}
 
-	// Setup routes
 	server.setupRoutes()
-
 	return server, nil
 }
 
 func (s *Server) setupRoutes() {
-	// Health check route
 	s.Router.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"status": "OK",
-		})
+		c.JSON(200, gin.H{"status": "OK"})
 	})
 
-	// Add your other routes here
-	// Example:
 	userHandler := handlers.NewUserHandler(services.NewUserService(s.DB))
 	apis := s.Router.Group("/api")
 	apis.POST("users", userHandler.CreateUser)
-
-	// userRoutes.GET("/", handlers.CreateUser)
+	apis.GET("users/:id", userHandler.FindUser)
 }
 
 func (s *Server) Run(addr string) error {
@@ -57,8 +47,6 @@ func (s *Server) Run(addr string) error {
 }
 
 func initializeDB(dsn string) (*gorm.DB, error) {
-	// Initialize your database connection here
-	// Example for PostgreSQL:
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err

@@ -24,3 +24,13 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{"id": userId})
 }
+
+func (h *UserHandler) FindUser(c *gin.Context) {
+	user, err := h.userService.GetUser(c)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+	} else {
+		c.JSON(http.StatusOK, user)
+	}
+}
