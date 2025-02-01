@@ -69,3 +69,17 @@ func (s *UserService) UpdateUser(c *gin.Context) error {
 	slog.WithData(slog.M{"id": id}).Info("user updated successfully")
 	return nil
 }
+
+func (s *UserService) DeleteUser(c *gin.Context) error {
+	userId := c.Param("id")
+	id, _ := strconv.Atoi(userId)
+	result := s.db.Delete(&models.User{ID: uint(id)})
+
+	if result.Error != nil {
+		slog.Error(result.Error)
+		return result.Error
+	}
+
+	slog.WithData(slog.M{"id": id}).Info("user deleted successfully")
+	return nil
+}
