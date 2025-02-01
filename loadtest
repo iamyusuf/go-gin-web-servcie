@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Number of requests to send
+total_requests=10000
+# Number of concurrent requests
+concurrency=20
+
+# Define the curl command
+curl_cmd="curl --silent --output /dev/null --write-out '%{http_code}\n' --location 'http://localhost:8080/api/users' \
+--header 'Content-Type: application/json' \
+--data-raw '{\"name\": \"Nick_Swaniawski\", \"email\": \"Santa.Schamberger14@gmail.com\"}'"
+
+# Start time
+start_time=$(date +%s)
+
+# Run the test
+seq $total_requests | xargs -P $concurrency -I {} bash -c "$curl_cmd"
+
+# End time
+end_time=$(date +%s)
+
+echo "Load test completed in $((end_time - start_time)) seconds."

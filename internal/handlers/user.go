@@ -19,10 +19,9 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
+	} else {
+		c.JSON(http.StatusCreated, gin.H{"id": userId})
 	}
-
-	c.JSON(http.StatusCreated, gin.H{"id": userId})
 }
 
 func (h *UserHandler) FindUser(c *gin.Context) {
