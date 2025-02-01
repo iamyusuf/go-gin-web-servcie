@@ -41,6 +41,7 @@ func (s *Server) setupRoutes() {
 	apis.POST("users", userHandler.CreateUser)
 	apis.GET("users/:id", userHandler.FindUser)
 	apis.PUT("users/:id", userHandler.UpdateUser)
+	apis.DELETE("users/:id", userHandler.DeleteUser)
 }
 
 func (s *Server) Run(addr string) error {

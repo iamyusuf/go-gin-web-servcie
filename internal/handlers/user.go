@@ -38,7 +38,17 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 	err := h.userService.UpdateUser(c)
 
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	} else {
+		c.JSON(http.StatusOK, nil)
+	}
+}
+
+func (h *UserHandler) DeleteUser(c *gin.Context) {
+	err := h.userService.DeleteUser(c)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	} else {
 		c.JSON(http.StatusOK, nil)
 	}
