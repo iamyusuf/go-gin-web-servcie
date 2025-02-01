@@ -34,3 +34,13 @@ func (h *UserHandler) FindUser(c *gin.Context) {
 		c.JSON(http.StatusOK, user)
 	}
 }
+
+func (h *UserHandler) UpdateUser(c *gin.Context) {
+	err := h.userService.UpdateUser(c)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+	} else {
+		c.JSON(http.StatusOK, nil)
+	}
+}

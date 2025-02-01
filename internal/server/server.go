@@ -40,6 +40,7 @@ func (s *Server) setupRoutes() {
 	apis := s.Router.Group("/api")
 	apis.POST("users", userHandler.CreateUser)
 	apis.GET("users/:id", userHandler.FindUser)
+	apis.PUT("users/:id", userHandler.UpdateUser)
 }
 
 func (s *Server) Run(addr string) error {

@@ -5,6 +5,8 @@ import (
 	"github.com/gookit/slog"
 	"gorm.io/gorm"
 	"my-service/internal/models"
+	"my-service/internal/requests"
+	"strconv"
 )
 
 type UserService struct {
@@ -46,4 +48,24 @@ func (s *UserService) GetUser(c *gin.Context) (*models.User, error) {
 	}
 
 	return &user, nil
+}
+
+func (s *UserService) UpdateUser(c *gin.Context) error {
+	userId := c.Param("id")
+	userRequest := &requests.User{}
+
+	if err := c.ShouldBind(userRequest); err != nil {
+		return err
+	}
+
+	id, _ := strconv.Atoi(userId)
+	result := s.db.Model(&models.User{ID: uint(id)}).Update("name", userRequest.Name)
+
+	if result.Error != nil {
+		slog.Error(result.Error)
+		return result.Error
+	}
+
+	slog.WithData(slog.M{"id": id}).Info("user updated successfully")
+	return nil
 }
