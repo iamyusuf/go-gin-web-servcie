@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 	"my-service/internal/models"
 	"my-service/internal/requests"
+	"my-service/internal/types"
 	"strconv"
 )
 
@@ -82,4 +83,20 @@ func (s *UserService) DeleteUser(c *gin.Context) error {
 
 	slog.WithData(slog.M{"id": id}).Info("user deleted successfully")
 	return nil
+}
+
+func (s *UserService) GetUsers(c *gin.Context) ([]*models.User, error) {
+	var p types.Pagination
+	var users []*models.User
+	if err := c.ShouldBindQuery(&p); err != nil {
+		return nil, err
+	}
+
+	result := s.db.Limit(p.Limit()).Offset(p.Offset()).Find(&users)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return users, nil
 }

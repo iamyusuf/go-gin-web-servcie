@@ -14,6 +14,16 @@ func NewUserHandler(userService *services.UserService) *UserHandler {
 	return &UserHandler{userService: userService}
 }
 
+func (h *UserHandler) GetUsers(c *gin.Context) {
+	users, err := h.userService.GetUsers(c)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"users": users})
+	}
+}
+
 func (h *UserHandler) CreateUser(c *gin.Context) {
 	userId, err := h.userService.CreateUser(c)
 
