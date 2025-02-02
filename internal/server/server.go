@@ -39,6 +39,7 @@ func (s *Server) setupRoutes() {
 	userHandler := handlers.NewUserHandler(services.NewUserService(s.DB))
 	apis := s.Router.Group("/api")
 	apis.POST("users", userHandler.CreateUser)
+	apis.GET("users", userHandler.GetUsers)
 	apis.GET("users/:id", userHandler.FindUser)
 	apis.PUT("users/:id", userHandler.UpdateUser)
 	apis.DELETE("users/:id", userHandler.DeleteUser)
