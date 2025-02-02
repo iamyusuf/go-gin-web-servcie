@@ -2,7 +2,7 @@
 
 1. Go to the directory folder:
     ```sh
-    cd app-folder
+    cd go-gin-web-service
     ```
    
 2. Copy the .env.example file
