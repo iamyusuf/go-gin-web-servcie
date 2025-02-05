@@ -27,6 +27,10 @@ func (s *UserService) CreateUser(c *gin.Context) (uint, error) {
 		return 0, err
 	}
 
+	if err := user.HashPassword(); err != nil {
+		return 0, err
+	}
+
 	result := s.db.Create(user)
 
 	if result.Error != nil {
