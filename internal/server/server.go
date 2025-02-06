@@ -35,14 +35,20 @@ func (s *Server) setupRoutes() {
 	s.Router.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{"status": "OK"})
 	})
+	userService := services.NewUserService(s.DB)
 
-	userHandler := handlers.NewUserHandler(services.NewUserService(s.DB))
+	userHandler := handlers.NewUserHandler(userService)
+
 	apis := s.Router.Group("/api")
 	apis.POST("users", userHandler.CreateUser)
 	apis.GET("users", userHandler.GetUsers)
 	apis.GET("users/:id", userHandler.FindUser)
 	apis.PUT("users/:id", userHandler.UpdateUser)
 	apis.DELETE("users/:id", userHandler.DeleteUser)
+
+	authService := services.NewAuthService(userService)
+	authHandler := handlers.NewAuthHandler(authService)
+	apis.POST("auth/login", authHandler.Login)
 }
 
 func (s *Server) Run(addr string) error {
