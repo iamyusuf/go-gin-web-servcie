@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"errors"
 	"golang.org/x/crypto/bcrypt"
 	"time"
 
@@ -27,4 +28,12 @@ func (u *User) HashPassword() error {
 		u.Password = string(bytes)
 		return nil
 	}
+}
+
+func (u *User) CheckPassword(password string) error {
+	if err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password)); err != nil {
+		return errors.New("invalid credentials")
+	}
+
+	return nil
 }

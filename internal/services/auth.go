@@ -1,9 +1,9 @@
 package services
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
-	"golang.org/x/crypto/bcrypt"
 	"my-service/internal/requests"
 	"time"
 )
@@ -25,19 +25,13 @@ func (s *AuthService) Login(c *gin.Context) (string, error) {
 		return "", err
 	}
 
-	user, err := s.userService.GetUserByEmail(login.Email)
-
-	if err != nil {
+	if user, err := s.userService.GetUserByEmail(login.Email); err != nil {
+		return "", errors.New("invalid credentials")
+	} else if err := user.CheckPassword(login.Password); err != nil {
 		return "", err
+	} else {
+		return generateToken(user.ID)
 	}
-
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(login.Password))
-
-	if err != nil {
-		return "", err
-	}
-
-	return generateToken(user.ID)
 }
 
 func generateToken(userId uint) (string, error) {
