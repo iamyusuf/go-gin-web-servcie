@@ -104,3 +104,15 @@ func (s *UserService) GetUsers(c *gin.Context) ([]*models.User, error) {
 
 	return users, nil
 }
+
+func (s *UserService) GetUserByEmail(email string) (*models.User, error) {
+	var user models.User
+	result := s.db.Where("email = ?", email).First(&user)
+
+	if result.Error != nil {
+		slog.Error(result.Error)
+		return nil, result.Error
+	}
+
+	return &user, nil
+}
