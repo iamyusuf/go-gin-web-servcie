@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/golodash/galidator/v2"
+	"my-service/internal/models"
 	"my-service/internal/services"
 	"net/http"
 )
@@ -22,8 +24,23 @@ func (h *UserHandler) GetUsers(c *gin.Context) {
 	}
 }
 
+type user struct {
+	Name     string `json:"name" binding:"required" required:"$field is required"`
+	Password string `json:"password" binding:"required" required:"$field is required"`
+	Email    string `json:"email" binding:"required" required:"$field is required"`
+}
+
+var (
+	g         = galidator.G()
+	validator = g.Validator(models.User{})
+)
+
 func (h *UserHandler) CreateUser(c *gin.Context) {
-	if userId, err := h.userService.CreateUser(c); err != nil {
+	user := models.User{}
+
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": validator.DecryptErrors(err)})
+	} else if userId, err := h.userService.CreateUser(&user); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	} else {
 		c.JSON(http.StatusCreated, gin.H{"id": userId})
