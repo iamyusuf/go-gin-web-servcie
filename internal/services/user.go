@@ -20,13 +20,7 @@ func NewUserService(db *gorm.DB) *UserService {
 	}
 }
 
-func (s *UserService) CreateUser(c *gin.Context) (uint, error) {
-	user := &models.User{}
-
-	if err := c.ShouldBind(user); err != nil {
-		return 0, err
-	}
-
+func (s *UserService) CreateUser(user *models.User) (uint, error) {
 	if err := user.HashPassword(); err != nil {
 		return 0, err
 	}
