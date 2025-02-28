@@ -61,3 +61,19 @@ func (u *User) CheckPassword(password string) error {
 
 	return nil
 }
+
+func (u *User) HasUpcomingBirthday() bool {
+	if u.Birthday == nil {
+		return false
+	}
+
+	now := time.Now()
+	nextBirthday := time.Date(now.Year(), u.Birthday.Month(), u.Birthday.Day(), 0, 0, 0, 0, time.UTC)
+
+	if nextBirthday.Before(now) {
+		nextBirthday = nextBirthday.AddDate(1, 0, 0)
+	}
+
+	diff := nextBirthday.Sub(now)
+	return diff <= 10*24*time.Hour
+}
