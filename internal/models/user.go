@@ -3,8 +3,9 @@ package models
 import (
 	"database/sql"
 	"errors"
-	"golang.org/x/crypto/bcrypt"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 
 	"gorm.io/gorm"
 )
@@ -28,6 +29,29 @@ func (u *User) HashPassword() error {
 		u.Password = string(bytes)
 		return nil
 	}
+}
+
+func (u *User) GetAge() (int, int, int) {
+	if u.Birthday == nil {
+		return 0, 0, 0
+	}
+
+	now := time.Now()
+	years := now.Year() - u.Birthday.Year()
+	months := now.Month() - u.Birthday.Month()
+	days := now.Day() - u.Birthday.Day()
+
+	if days < 0 {
+		months--
+		days += time.Date(now.Year(), now.Month(), 0, 0, 0, 0, 0, time.UTC).Day()
+	}
+
+	if months < 0 {
+		years--
+		months += 12
+	}
+
+	return years, int(months), days
 }
 
 func (u *User) CheckPassword(password string) error {
