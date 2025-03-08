@@ -13,6 +13,7 @@ func TestUser_HashPassword(t *testing.T) {
 	err := user.HashPassword()
 	assert.NoError(t, err)
 	assert.NotEqual(t, "testpassword", user.Password)
+	assert.NoError(t, user.CheckPassword("testpassword"))
 }
 
 func TestUser_GetAge(t *testing.T) {
