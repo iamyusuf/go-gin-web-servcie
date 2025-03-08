@@ -15,3 +15,6 @@
    ```sh
    make
    ```
+
+
+Added github workflows, check directory `.github/workflows`
