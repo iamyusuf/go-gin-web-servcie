@@ -1,9 +1,6 @@
 name: Auto PR for Feature Branches
 
-on:
-  push:
-    branches:
-      - 'feature/*'
+on: [push]
 
 jobs:
   create-pull-request:
@@ -14,11 +11,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: main
-          branch: ${{ github.ref_name }}
-          title: "Merge ${{ github.ref_name }} into main"
-          body: "This pull request was automatically created from ${{ github.ref_name }}."
-          draft: false
+        uses: vsoch/pull-request-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_PREFIX: "feature/"
+          PULL_REQUEST_BRANCH: "master"
