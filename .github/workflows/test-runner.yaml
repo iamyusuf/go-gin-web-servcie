@@ -1,4 +1,4 @@
-name: Auto PR for Feature Branches
+name: Run test
 
 on: [push]
 
