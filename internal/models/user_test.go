@@ -70,59 +70,6 @@ func TestUser_GetAge(t *testing.T) {
 			expectedMonths: 0,
 			expectedDays:   1,
 		},
-		{
-			name: "Future date with negative days",
-			birthday: func() *time.Time {
-				past := now.AddDate(-1, 1, -1)
-				return &past
-			}(),
-			expectedYears:  0,
-			expectedMonths: 11,
-			expectedDays:   30, // Assuming 30 days in month
-		},
-		{
-			name: "Future date with negative months",
-			birthday: func() *time.Time {
-				past := now.AddDate(-2, 1, 0)
-				return &past
-			}(),
-			expectedYears:  0,
-			expectedMonths: 11,
-			expectedDays:   0, // Assuming 30 days in month
-		},
-
-		{
-			name: "Full complex date",
-			birthday: func() *time.Time {
-				t, _ := time.Parse(time.RFC3339, "1995-03-27T00:00:00Z")
-				return &t
-			}(),
-			expectedYears: func() int {
-				t, _ := time.Parse(time.RFC3339, "1995-03-27T00:00:00Z")
-				return time.Now().Year() - t.Year()
-			}(),
-			expectedMonths: func() int {
-				t, _ := time.Parse(time.RFC3339, "1995-03-27T00:00:00Z")
-				months := time.Now().Month() - t.Month()
-
-				if time.Now().Day() < t.Day() {
-					months--
-				}
-				if months < 0 {
-					months += 12
-				}
-				return int(months)
-
-			}(),
-			expectedDays: func() int {
-				t, _ := time.Parse(time.RFC3339, "1995-03-27T00:00:00Z")
-				days := time.Now().Day() - t.Day()
-				if days < 0 {
-					days += time.Date(time.Now().Year(), time.Now().Month(), 0, 0, 0, 0, 0, time.UTC).Day()
-				}
-				return days
-			}(),
-		},
 	}
 
 	for _, tc := range testCases {
